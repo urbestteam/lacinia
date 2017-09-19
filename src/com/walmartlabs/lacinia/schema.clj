@@ -7,7 +7,7 @@
 ;     http://www.apache.org/licenses/LICENSE-2.0
 ;
 ; Unless required by applicable law or agreed to in writing, software
-; distributed under the License is distributed on an "AS IS" BASIS,
+; distributed under the License is distributed on an "AS IS" BASIS
 ; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
@@ -39,7 +39,7 @@
     (clojure.lang IObj)
     (java.io Writer)))
 
-;; When using Clojure 1.8, the dependency on clojure-future-spec must be included,
+;; When using Clojure 1.8, the dependency on clojure-future-spec must be included
 ;; and this code will trigger
 (when (-> *clojure-version* :minor (< 9))
   (require '[clojure.future :refer [any? simple-keyword? simple-symbol?]]))
@@ -53,7 +53,7 @@
 ;;-------------------------------------------------------------------------------
 ;; ## Helpers
 
-(def ^:private graphql-identifier #"(?ix) _* [a-z] [a-z0-9_]*")
+(def ^:private graphql-identifier #"(?ix) _* [a-z] [a-zA-Z0-9_-]*")
 
 (defrecord ^:private CoercionFailure
   [message])
@@ -286,7 +286,7 @@
                               ::default-value]))
 (s/def ::default-value any?)
 (s/def ::args (s/map-of ::schema-key ::arg))
-;; Defining these callbacks in spec has been a challenge. At some point,
+;; Defining these callbacks in spec has been a challenge. At some point
 ;; we can expand this to capture a bit more about what a field resolver
 ;; is passed and should return.
 (s/def ::resolve (s/or :function ::function-or-var
@@ -466,7 +466,7 @@
   (contains? (:implements f-type) (:type-name i-type)))
 
 ;; That's as far as the spec goes, but one could imagine additonal rules
-;; such as a union-vs-union (the field union must be a subset of the interface union),
+;; such as a union-vs-union (the field union must be a subset of the interface union)
 ;; or interface-union (all members of the union must implement the interface).
 
 (defn ^:private is-compatible-type?
@@ -477,13 +477,13 @@
         i-type (:type interface-type)
         o-type (:type object-type)]
     (cond
-      ;; When the object field is non-null and the interface field allows nulls that's ok,
+      ;; When the object field is non-null and the interface field allows nulls that's ok
       ;; the object can be more specific than the interface.
       (and (= o-kind :non-null)
            (not= i-kind :non-null))
       (recur schema i-kind o-type)
 
-      ;; Otherwise :list must match :list, and :root must match :root,
+      ;; Otherwise :list must match :list, and :root must match :root
       ;; and :non-null must match :non-null
       (not= o-kind i-kind)
       false
@@ -973,7 +973,7 @@
 
   May throw an exception if the type fails validation.
 
-  Because compilation of types occurs directly on the values, in an indeterminate order,
+  Because compilation of types occurs directly on the values, in an indeterminate order
   some further validation and compilation must be delayed until after all types have been compiled."
   (fn [type schema] (:category type)))
 
@@ -1008,7 +1008,7 @@
     (assoc union :members members)))
 
 (defn ^:private apply-deprecated-directive
-  "For a field definition or enum value definition, checks for a :deprecated annotation and,
+  "For a field definition or enum value definition, checks for a :deprecated annotation and
   if present, sets the definitions :deprecated key."
   [element-def]
   (if-let [directive (some->> element-def
@@ -1582,7 +1582,7 @@
 
 (def ^{:dynamic true
        :added "0.25.0"} *verbose-schema-printing*
-  "If bound to true, then the compiled schema prints and pretty-prints like an ordinary map,
+  "If bound to true, then the compiled schema prints and pretty-prints like an ordinary map
   which is sometimes useful during development. When false (the default) the schema
   output is just a placeholder."
   false)
