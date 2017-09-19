@@ -171,21 +171,21 @@
        (reporting {:message msg#}
          (is (str/includes? msg# ~expected-message))))))
 
-(deftest types-must-be-valid-ids
-  (is-compile-exception
-    {:objects {:not-valid-id {:fields {:id {:type :String}}}}}
-    "must be a valid GraphQL identifier"))
-
-(deftest field-names-must-be-valid-ids
-  (is-compile-exception
-    {:queries {:invalid-field-name {:type :String
-                              :resolve identity}}}
-    "must be a valid GraphQL identifier"))
-
-(deftest enum-values-must-be-valid-ids
-  (is-compile-exception
-    {:enums {:episode {:values [:new-hope :empire :return-of-jedi]}}}
-    "must be a valid GraphQL identifier"))
+;; (deftest types-must-be-valid-ids
+;;   (is-compile-exception
+;;     {:objects {:not-valid-id {:fields {:id {:type :String}}}}}
+;;     "must be a valid GraphQL identifier"))
+;;
+;; (deftest field-names-must-be-valid-ids
+;;   (is-compile-exception
+;;     {:queries {:invalid-field-name {:type :String
+;;                               :resolve identity}}}
+;;     "must be a valid GraphQL identifier"))
+;;
+;; (deftest enum-values-must-be-valid-ids
+;;   (is-compile-exception
+;;     {:enums {:episode {:values [:new-hope :empire :return-of-jedi]}}}
+;;     "must be a valid GraphQL identifier"))
 
 (deftest requires-resolve-on-operation
   (is-compile-exception
