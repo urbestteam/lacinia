@@ -52,7 +52,7 @@
 ;;-------------------------------------------------------------------------------
 ;; ## Helpers
 
-(def ^:private graphql-identifier #"(?ix) _* [a-z] [a-z0-9_]*")
+(def ^:private graphql-identifier #"(?ix) _* [a-z] [a-zA-Z0-9_-]*")
 
 (defrecord ^:private CoercionFailure
   [message])
