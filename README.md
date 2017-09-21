@@ -1,3 +1,15 @@
+# Lacinia-hyphen
+
+It is a fork, with support for hyphens (`-`) in graphql identifiers for better interop with clojure, it breaks qgraphql spec and you probably don't need it.
+
+To use this lib add following code to your project.clj:
+
+```
+  :repositories [["jitpack" "https://jitpack.io"]]
+  :dependencies [,,,
+                 [com.github.urbestteam/lacinia-hyphen "0.32.0-0.1.0"]]
+```
+
 # Lacinia
 
 
@@ -224,7 +236,7 @@ Although this library is used in production at Walmart, it is
 still considered alpha software - subject to change.
 We expect to stabilize it in the near future.
 
-To use this library with Clojure 1.8, you must include 
+To use this library with Clojure 1.8, you must include
 a dependency on [clojure-future-spec](https://github.com/tonsky/clojure-future-spec).
 
 More details are [in the manual](http://lacinia.readthedocs.io/en/latest/clojure.html).
