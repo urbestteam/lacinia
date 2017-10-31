@@ -160,7 +160,7 @@ Null
     ;
 
 NameId
-    : [_A-Za-z][_0-9A-Za-z]*
+    : [_A-Za-z][0-9A-Za-z_-]*
     ;
 
 IntValue
