@@ -1,4 +1,4 @@
-# Lacinia-hyphen 
+# Lacinia-hyphen
 
 It is a fork, with support for hyphens (`-`) in graphql identifiers for better interop with clojure, it breaks qgraphql spec and you probably don't need it.
 
@@ -7,7 +7,7 @@ To use this lib add following code to your project.clj:
 ```
   :repositories [["jitpack" "https://jitpack.io"]]
   :dependencies [,,,
-                 [com.github.urbestteam/lacinia-hyphen "0.21.2"]]
+                 [com.github.urbestteam/lacinia-hyphen "0.31.1-SNAPSHOT-1"]]
 ```
 
 # Lacinia
