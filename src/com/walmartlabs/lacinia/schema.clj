@@ -26,9 +26,9 @@
     [com.walmartlabs.lacinia.introspection :as introspection]
     [com.walmartlabs.lacinia.internal-utils
      :refer [map-vals map-kvs filter-vals deep-merge q
-             is-internal-type-name? sequential-or-set? as-keyword
-             cond-let ->TaggedValue is-tagged-value? extract-value extract-type-tag
-             to-message]]
+             is-internal-type-name? sequential-or-set? as-keyword hyphenate
+             cond-let ->TaggedValue is-tagged-value? extract-value
+             extract-type-tag to-message underline]]
     [com.walmartlabs.lacinia.resolve :as resolve :refer [ResolverResult resolve-as combine-results is-resolver-result?]]
     [clojure.string :as str]
     [clojure.set :refer [difference]]
@@ -615,6 +615,15 @@
         (update :errors conj error)
         callback)))
 
+(defn validate-resolved-value-case [allowed-values resolved-value]
+  (let [snake-cased-schema?
+        (some true? (map #(-> % name (str/includes? "_")) allowed-values))
+
+        updated-value (if snake-cased-schema?
+                         (underline resolved-value)
+                         resolved-value)]
+    updated-value))
+
 (defn ^:private create-root-selector
   "Creates a selector function for the :root kind, which is the point at which
   a type refers to something in the schema.
@@ -676,17 +685,22 @@
 
         selector (if (= :enum category)
                    (let [possible-values (-> field-type :values set)]
+
                      (fn validate-enum [{:keys [resolved-value]
                                          :as selector-context}]
+
                        (cond-let
                          (nil? resolved-value)
                          (selector selector-context)
 
-                         :let [keyword-value (as-keyword resolved-value)]
+                         :let [updated-value
+                               (validate-resolved-value-case possible-values resolved-value)
+
+                               keyword-value (as-keyword updated-value)]
 
                          (not (possible-values keyword-value))
                          (throw (ex-info "Field resolver returned an undefined enum value."
-                                         {:resolved-value resolved-value
+                                         {:resolved-value updated-value
                                           :enum-values possible-values}))
 
                          :else
@@ -1493,11 +1507,7 @@
   into hyphens.  At one time, this was the default behavior."
   {:added "0.17.0"}
   [field-name]
-  (-> field-name
-      name
-      (str/replace "_" "-")
-      keyword
-      default-field-resolver))
+  (-> field-name hyphenate default-field-resolver))
 
 (def ^:private default-compile-opts
   {:default-field-resolver default-field-resolver})
