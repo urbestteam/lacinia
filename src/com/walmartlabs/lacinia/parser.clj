@@ -21,7 +21,8 @@
     [com.walmartlabs.lacinia.internal-utils
      :refer [cond-let update? q map-vals filter-vals remove-vals
              with-exception-context throw-exception to-message
-             keepv as-keyword *exception-context*]]
+             keepv as-keyword *exception-context* hyphenate
+             is-internal-type-name?]]
     [com.walmartlabs.lacinia.schema :as schema]
     [com.walmartlabs.lacinia.constants :as constants]
     [clojure.spec.alpha :as s]
@@ -285,21 +286,31 @@
 
   nil)
 
+(defn argument-case-to-kebab [allowed-values arg-value]
+  (let [allowed-values (->> allowed-values (map hyphenate) set)
+        kebab-cased-arg-value (hyphenate arg-value)]
+    [allowed-values kebab-cased-arg-value]))
+
 (defmethod process-literal-argument :enum
   [schema argument-definition [_ arg-value]]
   ;; First, make sure the category is an enum
   (let [enum-type-name (schema/root-type-name argument-definition)
-        type-def (get schema enum-type-name)]
+        type-def (get schema enum-type-name)
+        values-set (:values-set type-def)
+
+        [allowed-values kebab-cased-arg-value]
+        (argument-case-to-kebab values-set arg-value)]
+
     (with-exception-context {:value arg-value}
       (when-not (= :enum (:category type-def))
         (throw-exception "Enum value supplied for argument whose type is not an enum."
                          {:argument-type enum-type-name}))
 
-      (or (get (:values-set type-def) arg-value)
+      (or (get allowed-values kebab-cased-arg-value)
           (throw-exception (format "Provided argument value %s is not member of enum type."
                                    (q arg-value))
-                           {:allowed-values (:values-set type-def)
-                            :enum-type enum-type-name})))))
+                           {:allowed-values values-set
+                            :enum-type      enum-type-name})))))
 
 (defmethod process-literal-argument :object
   [schema argument-definition arg-tuple]

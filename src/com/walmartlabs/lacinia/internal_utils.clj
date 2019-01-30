@@ -352,3 +352,8 @@
     :else
     (assoc-in! schema (conj base :args (keyword arg-name) :description) description)))
 
+(defn hyphenate [type-unit]
+  (-> type-unit name (str/replace "_" "-") keyword))
+
+(defn underline [type-unit]
+  (-> type-unit name (str/replace "-" "_") keyword))
