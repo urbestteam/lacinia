@@ -42,7 +42,7 @@
 
 (deftest can-report-enum-value
   (expect ::schema/enum-value 123 "string?" "simple-symbol?" "simple-keyword?")
-  (expect ::schema/enum-value "this-and-that" "must be a valid GraphQL identifier"))
+  (expect ::schema/enum-value "this-and-that" "Success!"))
 
 (deftest sdl-function-map
   (expect ::ps/fn-map {:foo :bar :gnip {:q 'gnop}}
